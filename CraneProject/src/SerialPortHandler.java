@@ -2,34 +2,66 @@ import java.util.*;
 import java.io.*;
 import gnu.io.*;
 
-
-
 public class SerialPortHandler {
   private static SerialPort serialPort;
   private static OutputStream outputStream;
   private InputStream inputStream;
   private String portName;
+  private CommPortIdentifier portId;
   
-  public void connect (String pn) throws IOException {
-    this.portName = pn;
-    try {
-      //obtain a CommPortIdentifier object to the port of the specified name
-      CommPortIdentifier portId = CommPortIdentifier.getPortIdentifier(portName);
-      //open and begin owning the port
-      serialPort = (SerialPort) portId.open(this.getClass().getName(), 2000);
-      //set port parameters
-      this.setSerialParameters();
-      //open the streams, if they wont open, close the port before throwing an exception
-      outputStream = serialPort.getOutputStream();
-      inputStream = serialPort.getInputStream();
-    } catch (NoSuchPortException e) {
-      throw new IOException(e.getMessage());
-    } catch (PortInUseException e) {
-      throw new IOException(e.getMessage());
-    } catch (IOException e) {
-      serialPort.close();
-      throw e;
+  public void connect () throws IOException {
+//    this.portName = pn;
+    Enumeration ports = CommPortIdentifier.getPortIdentifiers();
+    CommPortIdentifier portIdentifier = null;
+    
+    while (ports.hasMoreElements()) {
+      portIdentifier = (CommPortIdentifier) ports.nextElement();
+      System.out.println("PORT: " + portIdentifier.getName());
+      System.out.println("Current Owner: " + portIdentifier.getCurrentOwner());
+      
+      portName = portIdentifier.getName();
+      if (!portIdentifier.isCurrentlyOwned()){
+        try {
+          //obtain a CommPortIdentifier object to the port of the specified name
+          portId = CommPortIdentifier.getPortIdentifier(portIdentifier.getName());
+          //open and begin owning the port
+          serialPort = (SerialPort) portId.open(this.getClass().getName(), 2000);
+          //set port parameters
+          this.setSerialParameters();
+          //open the streams, if they wont open, close the port before throwing an exception
+          outputStream = serialPort.getOutputStream();
+          inputStream = serialPort.getInputStream();
+          
+          break;
+        } catch (NoSuchPortException e) {
+          throw new IOException(e.getMessage());
+        } catch (PortInUseException e) {
+          throw new IOException(e.getMessage());
+        } catch (IOException e) {
+          serialPort.close();
+          throw e;
+        }
+      }
+      
     }
+//    try {
+//      //obtain a CommPortIdentifier object to the port of the specified name
+//      CommPortIdentifier portId = CommPortIdentifier.getPortIdentifier(portName);
+//      //open and begin owning the port
+//      serialPort = (SerialPort) portId.open(this.getClass().getName(), 2000);
+//      //set port parameters
+//      this.setSerialParameters();
+//      //open the streams, if they wont open, close the port before throwing an exception
+//      outputStream = serialPort.getOutputStream();
+//      inputStream = serialPort.getInputStream();
+//    } catch (NoSuchPortException e) {
+//      throw new IOException(e.getMessage());
+//    } catch (PortInUseException e) {
+//      throw new IOException(e.getMessage());
+//    } catch (IOException e) {
+//      serialPort.close();
+//      throw e;
+//    }
   }
   public InputStream getSerialInputStream() {
     return inputStream;
@@ -51,6 +83,14 @@ public class SerialPortHandler {
       throw new IOException("Unsupported serial port Parameter");
     }
 
+  }
+  
+  //close the port and exit the program.
+  public static void closePort() {
+    System.out.println("Closing port!");
+    System.out.println("Exiting Program");
+    serialPort.close();
+    System.exit(0);
   }
   
   //write a character to the serial port

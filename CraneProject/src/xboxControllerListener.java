@@ -59,7 +59,7 @@ public class xboxControllerListener implements XboxControllerListener {
         System.out.println("LEFT");
         break;
       default:
-        System.out.println("Not u, l, d or r");
+//        System.out.println("Not u, l, d or r");
       }
     } else {
       //if arg1 is false, it will stop the servo, hence the 's'
@@ -89,22 +89,14 @@ public class xboxControllerListener implements XboxControllerListener {
   //uses 0-359 degrees
   @Override
   public void leftThumbDirection(double arg0) {
-    
-//    //use j for left thumbstick
-//    System.out.println("Left thumbstick direction in degrees: " + (int)arg0);
-//    
-//    if (arg0 > 225 && arg0 < 315) { //stick is pointing left
-//      SerialPortHandler.write(new byte[] {'j', 'l'});
-//    } else if (arg0 > 45 && arg0 < 135) { //stick is pointing right
-//      SerialPortHandler.write(new byte[] {'j', 'r'}); 
-//    }
+    // TODO Auto-generated method stub
+
   }
 
   @Override
   public void leftThumbMagnitude(double arg0) {
-    //use j for left thumbstick
-//    System.out.println("Magnitude: " + arg0);
-  
+    // TODO Auto-generated method stub
+
   }
 
   @Override
@@ -129,21 +121,14 @@ public class xboxControllerListener implements XboxControllerListener {
   //uses 0-359 degrees
   @Override
   public void rightThumbDirection(double arg0) {
-//    //use k for right thumbstick
-//    System.out.println("Right thumbstick direction in degrees: " + (int)arg0);
-//    int direction = (int)arg0;
-//    System.out.println("Left thumbstick direction in degrees: " + (int)arg0);
-//    if (arg0 > 315 || arg0 < 45) { //stick is pointing up
-//      SerialPortHandler.write(new byte[] {'k', (byte)direction});
-//    } else if (arg0 > 135 && arg0 < 225) { //stick is pointing down
-//      SerialPortHandler.write(new byte[] {'k', (byte)direction});
-//    }
+    // TODO Auto-generated method stub
+
   }
 
   @Override
   public void rightThumbMagnitude(double arg0) {
-    //use k for right thumbstick
-//    System.out.println("Magnitude: " + arg0);
+    // TODO Auto-generated method stub
+
   }
 
   @Override
@@ -156,5 +141,6 @@ public class xboxControllerListener implements XboxControllerListener {
   @Override
   public void start(boolean arg0) {
     // TODO Auto-generated method stub
+    SerialPortHandler.closePort();
   }
 }

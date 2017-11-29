@@ -1,27 +1,29 @@
 import ch.aplu.xboxcontroller.XboxController;
-
 import java.io.IOException;
-
 import javax.comm.*;
-
 
 public class main {
 
+  /*
+   * must disable all other COM ports on Windows PC before running or else it might not work.
+   * must extract appropriate dlls to java path, or add them to the java path environment variable.
+   */
   public static void main(String[] args) {
-    
+//    PATH = C:\C:\Windows\XboxController"
+//    contains: rxtxSerial.dll, win32comm.dll, xboxcontroller.dll, xboxcontroller64.dll
+    System.loadLibrary("xboxcontroller64");
     xboxControllerListener xcl = new xboxControllerListener();
     XboxController xc = new XboxController();
     xc.addXboxControllerListener(xcl);
-    System.out.println(xc.isConnected());
+    System.out.println("Controller connected: " + xc.isConnected());
     
     SerialPortHandler sph = new SerialPortHandler();
     try {
-      sph.connect("COM3");
+      sph.connect();
       System.out.println("Connected to: " + sph.getPortName());
     } catch (IOException e) {
-      System.out.println("Connect to "+ sph.getPortName() + "failed");
-      System.out.println("System Shutting Down");
-      System.exit(0);
+      e.printStackTrace();
+      System.out.println("Connect to "+ sph.getPortName() + " failed");
     }
     
     
